@@ -1,6 +1,7 @@
 package ru.appium.lesson;
 
 import java.net.URL;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -24,6 +25,16 @@ public class FirstTest {
     private AppiumDriver<MobileElement> driver;
     private static final int DEFAULT_TIMEOUT = 5;
 
+    // Locators
+    private static final By SKIP_BUTTON = By.id("org.wikipedia:id/fragment_onboarding_skip_button");
+    private static final By SEARCH_INIT = By.xpath("//*[contains(@text, 'Search Wikipedia')]");
+    private static final By SEARCH_INPUT_BY_ID = By.id("org.wikipedia:id/search_src_text");
+    private static final By SEARCH_INPUT = By.xpath("//*[contains(@text, 'Search…')]");
+    private static final By BACK_BUTTON = By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']/*[@class='android.widget.ImageButton']");
+    private static final By RESULT_JAVA = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']");
+    private static final By ARTICLE_TITLE = By.id("org.wikipedia:id/view_page_title_text");
+    private static final By SEARCH_RESULTS = By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']");
+
     @Before
     public void setUp() throws Exception {
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -43,108 +54,68 @@ public class FirstTest {
         driver.quit();
     }
 
-    /**
-     * Rigorous Test :-)
-     */
     @Test
     public void shouldAnswerWithTrue() {
-        waitForElementAndClick(By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                               "Can't find skip button",
-                               DEFAULT_TIMEOUT);
-
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                               "Can't find 'Search wikipedia' input",
-                               DEFAULT_TIMEOUT);
-
-        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
-                                  "Java",
-                                  "Can't find 'Search' input",
-                                  DEFAULT_TIMEOUT);
-
-        waitForElementPresent(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-                              "Can't find 'Object-oriented programming language' topic by 'Java'",
-                              15);
+        waitForElementAndClick(SKIP_BUTTON, "Can't find skip button", DEFAULT_TIMEOUT);
+        waitForElementAndClick(SEARCH_INIT, "Can't find 'Search wikipedia' input", DEFAULT_TIMEOUT);
+        waitForElementAndSendKeys(SEARCH_INPUT, "Java", "Can't find 'Search' input", DEFAULT_TIMEOUT);
+        waitForElementPresent(RESULT_JAVA, "Can't find 'Object-oriented programming language' topic by 'Java'", 15);
     }
 
     @Test
     public void testCancelSearch() {
-        waitForElementAndClick(By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                               "Can't find skip button",
-                               DEFAULT_TIMEOUT);
-
-        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                               "Can't find 'Search wikipedia' input",
-                               DEFAULT_TIMEOUT);
-
-        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
-                                  "Java",
-                                  "Can't find 'Search' input",
-                                  DEFAULT_TIMEOUT);
-
-        waitForElementAndClear(By.id("org.wikipedia:id/search_src_text"),
-                               "Can't find 'Search' input",
-                               DEFAULT_TIMEOUT);
+        waitForElementAndClick(SKIP_BUTTON, "Can't find skip button", DEFAULT_TIMEOUT);
+        waitForElementAndClick(SEARCH_INIT, "Can't find 'Search wikipedia' input", DEFAULT_TIMEOUT);
+        waitForElementAndSendKeys(SEARCH_INPUT, "Java", "Can't find 'Search' input", DEFAULT_TIMEOUT);
+        waitForElementAndClear(SEARCH_INPUT_BY_ID, "Can't find 'Search' input", DEFAULT_TIMEOUT);
 
         // В новой версии приложения нет крестика в поле ввода 'Search...' поэтому я нажимаю кнопку со стрелочкой
-        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']/*[@class='android.widget.ImageButton']"),
-                               "Can't find 'Back' button",
-                               DEFAULT_TIMEOUT);
+        waitForElementAndClick(BACK_BUTTON, "Can't find 'Back' button", DEFAULT_TIMEOUT);
 
         // Кнопка со стрелочкой имеет тот же xpath, что и кнопка с лупой, поэтому ждем, когда пропадет поле ввода по id
-        waitForElementNotPresent(By.id("org.wikipedia:id/search_src_text"),
-                                 "Search src input still present on the page",
-                                 15);
+        waitForElementNotPresent(SEARCH_INPUT_BY_ID, "Search src input still present on the page", 15);
     }
 
     @Test
     public void testCompareArticleTitle() {
-        waitForElementAndClick(By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                               "Can't find skip button",
-                               DEFAULT_TIMEOUT);
+        waitForElementAndClick(SKIP_BUTTON, "Can't find skip button", DEFAULT_TIMEOUT);
+        waitForElementAndClick(SEARCH_INIT, "Can't find 'Search wikipedia' input", DEFAULT_TIMEOUT);
+        waitForElementAndSendKeys(SEARCH_INPUT, "Java", "Can't find 'Search' input", DEFAULT_TIMEOUT);
+        waitForElementAndClick(RESULT_JAVA, "Can't find 'Object-oriented programming language' topic by 'Java'", DEFAULT_TIMEOUT);
 
-        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                               "Can't find 'Search wikipedia' input",
-                               DEFAULT_TIMEOUT);
-
-        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
-                                  "Java",
-                                  "Can't find 'Search' input",
-                                  DEFAULT_TIMEOUT);
-
-        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-                               "Can't find 'Object-oriented programming language' topic by 'Java'",
-                               DEFAULT_TIMEOUT);
-
-        WebElement titleElement = waitForElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
-                                                        "Can't find article title",
-                                                        15);
+        WebElement titleElement = waitForElementPresent(ARTICLE_TITLE, "Can't find article title", 15);
 
         String title = titleElement.getAttribute("text");
 
-        Assert.assertEquals("We see unexpected title",
-                            "Java (programming language)",
-                            title);
+        Assert.assertEquals("We see unexpected title", "Java (programming language)", title);
     }
 
     @Test
     public void testCheckSearchPlaceholder() {
-        waitForElementAndClick(By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                               "Can't find skip button",
-                               DEFAULT_TIMEOUT);
+        waitForElementAndClick(SKIP_BUTTON, "Can't find skip button", DEFAULT_TIMEOUT);
+        waitForElementAndClick(SEARCH_INIT, "Can't find 'Search wikipedia' input", DEFAULT_TIMEOUT);
 
-        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                               "Can't find 'Search wikipedia' input",
-                               DEFAULT_TIMEOUT);
-
-        WebElement searchInputElement = waitForElementPresent(By.id("org.wikipedia:id/search_src_text"),
-                                                              "Can't find 'Search' input",
-                                                              DEFAULT_TIMEOUT);
+        WebElement searchInputElement = waitForElementPresent(SEARCH_INPUT_BY_ID, "Can't find 'Search' input", DEFAULT_TIMEOUT);
 
         String placeholder = searchInputElement.getAttribute("text");
 
-        Assert.assertEquals("Wrong placeholder in Search input",
-                            "Search…",
-                            placeholder);
+        Assert.assertEquals("Wrong placeholder in Search input", "Search…", placeholder);
+    }
+
+    @Test
+    public void testSearchFewArticles() {
+        waitForElementAndClick(SKIP_BUTTON, "Can't find skip button", DEFAULT_TIMEOUT);
+        waitForElementAndClick(SEARCH_INIT, "Can't find 'Search wikipedia' input", DEFAULT_TIMEOUT);
+        waitForElementAndSendKeys(SEARCH_INPUT, "Java", "Can't find 'Search' input", DEFAULT_TIMEOUT);
+        List<WebElement> resultElements = waitForElementsPresent(SEARCH_RESULTS, "No search results", DEFAULT_TIMEOUT);
+
+        Assert.assertTrue("Too few search results", resultElements.size() > 1);
+
+        // В новой версии приложения нет крестика в поле ввода 'Search...' поэтому я нажимаю кнопку со стрелочкой
+        waitForElementAndClick(BACK_BUTTON, "Can't find 'Back' button", DEFAULT_TIMEOUT);
+
+        waitForElementNotPresent(SEARCH_RESULTS, "Search results hasn't disappeared", DEFAULT_TIMEOUT);
+
     }
 
     private WebElement waitForElementPresent(By locator, String errorMessage, long timeOutInSeconds) {
@@ -155,6 +126,12 @@ public class FirstTest {
 
     private WebElement waitForElementPresent(By locator, String errorMessage) {
         return waitForElementPresent(locator, errorMessage, DEFAULT_TIMEOUT);
+    }
+
+    private List<WebElement> waitForElementsPresent(By locator, String errorMessage, long timeOutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
+        wait.withMessage(errorMessage + "\n");
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
     }
 
     private WebElement waitForElementAndClick(By locator, String errorMessage, long timeOutInSeconds) {
