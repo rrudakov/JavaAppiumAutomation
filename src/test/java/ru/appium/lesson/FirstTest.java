@@ -3,6 +3,7 @@ package ru.appium.lesson;
 import java.net.URL;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -115,6 +116,28 @@ public class FirstTest {
         waitForElementAndClick(BACK_BUTTON, "Can't find 'Back' button", DEFAULT_TIMEOUT);
 
         waitForElementNotPresent(SEARCH_RESULTS, "Search results hasn't disappeared", DEFAULT_TIMEOUT);
+
+    }
+
+    @Test
+    public void testSearchFewArticlesAndCheckResults() {
+        String searchString = "Test";
+
+        waitForElementAndClick(SKIP_BUTTON, "Can't find skip button", DEFAULT_TIMEOUT);
+        waitForElementAndClick(SEARCH_INIT, "Can't find 'Search wikipedia' input", DEFAULT_TIMEOUT);
+        waitForElementAndSendKeys(SEARCH_INPUT, searchString, "Can't find 'Search' input", DEFAULT_TIMEOUT);
+        List<WebElement> resultElements = waitForElementsPresent(SEARCH_RESULTS, "No search results", DEFAULT_TIMEOUT);
+
+        Assert.assertTrue("Too few search results", resultElements.size() > 1);
+
+        for (WebElement result : resultElements) {
+            WebElement titleElement = result.findElement(By.id("org.wikipedia:id/page_list_item_title"));
+            String title = titleElement.getAttribute("text");
+
+            Assert.assertThat(String.format("Search result doesn't contains string '%s'", searchString),
+                              title,
+                              CoreMatchers.containsString(searchString));
+        }
 
     }
 
