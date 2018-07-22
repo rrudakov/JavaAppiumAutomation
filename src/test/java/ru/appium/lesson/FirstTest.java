@@ -126,6 +126,27 @@ public class FirstTest {
                             title);
     }
 
+    @Test
+    public void testCheckSearchPlaceholder() {
+        waitForElementAndClick(By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                               "Can't find skip button",
+                               DEFAULT_TIMEOUT);
+
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
+                               "Can't find 'Search wikipedia' input",
+                               DEFAULT_TIMEOUT);
+
+        WebElement searchInputElement = waitForElementPresent(By.id("org.wikipedia:id/search_src_text"),
+                                                              "Can't find 'Search' input",
+                                                              DEFAULT_TIMEOUT);
+
+        String placeholder = searchInputElement.getAttribute("text");
+
+        Assert.assertEquals("Wrong placeholder in Search input",
+                            "Search…",
+                            placeholder);
+    }
+
     private WebElement waitForElementPresent(By locator, String errorMessage, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(errorMessage + "\n");
