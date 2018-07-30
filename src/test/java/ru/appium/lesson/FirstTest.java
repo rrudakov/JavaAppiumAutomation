@@ -140,6 +140,40 @@ public class FirstTest {
   }
 
   @Test
+  public void testSaveTwoArticles() {
+    String listName = "Test articles";
+    String firstArticleTitle = "Java (programming language)";
+    String secondArticleTitle = "Appium";
+    String firstsearchText = "Java";
+    String secondSearchText = "Appium";
+
+    this.openAppAndSearch(firstsearchText);
+    waitForElementAndClick(RESULT_JAVA, "Can't find 'Java' article", DEFAULT_TIMEOUT);
+    waitForElementAndClick(MORE_OPTIONS, "Can't find 'More options' button", DEFAULT_TIMEOUT);
+    waitForElementAndClick(this.byText("Add to reading list"), "Can't find 'Add to reading list' item", DEFAULT_TIMEOUT);
+    waitForElementAndClick(GOT_IT, "Can't find 'Got it!' button", DEFAULT_TIMEOUT);
+    waitForElementAndClick(CREATE_LIST, "Can't find 'Create list' button", DEFAULT_TIMEOUT);
+    waitForElementAndClear(LIST_NAME_INPUT, "Can't find 'List name' input field", DEFAULT_TIMEOUT);
+    waitForElementAndSendKeys(LIST_NAME_INPUT, listName, String.format("Can't fill in 'List name' input with text '%s'", listName), DEFAULT_TIMEOUT);
+    waitForElementAndClick(OK_BUTTON, "Can't find 'OK' button", DEFAULT_TIMEOUT);
+    waitForElementAndClick(CLOSE_BUTTON, "Can't find 'Close' button", DEFAULT_TIMEOUT);
+    waitForElementAndClick(SEARCH_INIT, "Can't find 'Search wikipedia' input", DEFAULT_TIMEOUT);
+    waitForElementAndSendKeys(SEARCH_INPUT, secondSearchText, "Can't find 'Search' input", DEFAULT_TIMEOUT);
+    waitForElementAndClick(RESULT_APPIUM, "Can't find 'Appium' article", DEFAULT_TIMEOUT);
+    waitForElementAndClick(MORE_OPTIONS, "Can't find 'More options' button", DEFAULT_TIMEOUT);
+    waitForElementAndClick(this.byText("Add to reading list"), "Can't find 'Add to reading list' item", DEFAULT_TIMEOUT);
+    waitForElementAndClick(this.byText(listName), String.format("Can't find reading list with name '%s'", listName), DEFAULT_TIMEOUT);
+    waitForElementAndClick(CLOSE_BUTTON, "Can't find 'Close' button", DEFAULT_TIMEOUT);
+    waitForElementAndClick(SAVED_ITEMS, "Can't find 'Saved items' button", DEFAULT_TIMEOUT);
+    waitForElementAndClick(this.byText(listName), String.format("Can't find saved list with name '%s'", listName), DEFAULT_TIMEOUT);
+    swipeElementToLeft(this.byText(firstArticleTitle), String.format("Can't find saved article with name '%s'", firstArticleTitle));
+    waitForElementAndClick(this.byText(secondArticleTitle), String.format("Can't find saved article with title '%s'", secondArticleTitle), DEFAULT_TIMEOUT);
+    String title = waitForElementAndGetAttribure(ARTICLE_TITLE, "text", "Can't find article title", 15);
+
+    Assert.assertEquals("Wrong article title", secondArticleTitle, title);
+  }
+
+  @Test
   public void testAmountOfNonEmptySearch() {
     String searchText = "Linkin park discograghy";
     this.openAppAndSearch(searchText);
@@ -330,7 +364,7 @@ public class FirstTest {
     TouchAction action = new TouchAction(driver);
     action
       .press(rightX, middleY)
-      .waitAction(600)
+      .waitAction(800)
       .moveTo(leftX, middleY)
       .release()
       .perform();
