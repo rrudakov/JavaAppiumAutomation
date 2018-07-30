@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ScreenOrientation;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -272,10 +273,27 @@ public class FirstTest {
     }
   }
 
+  @Test
+  public void testAssertElementPresent() {
+    String searchText = "Java";
+    this.openAppAndSearch(searchText);
+    waitForElementAndClick(RESULT_JAVA, "Can't find 'Java' article", 15);
+    Assert.assertTrue("Article title is not present", isElementCurrentlyVisible(ARTICLE_TITLE));
+  }
+
   private void openAppAndSearch(String searchText) {
     waitForElementAndClick(SKIP_BUTTON, "Can't find skip button", DEFAULT_TIMEOUT);
     waitForElementAndClick(SEARCH_INIT, "Can't find 'Search wikipedia' input", DEFAULT_TIMEOUT);
     waitForElementAndSendKeys(SEARCH_INPUT, searchText, "Can't find 'Search' input", DEFAULT_TIMEOUT);
+  }
+
+  private boolean isElementCurrentlyVisible(By locator) {
+    try {
+      WebElement element = waitForElementPresent(locator, "Ignore error", 0);
+      return element.isDisplayed();
+    } catch (TimeoutException e) {
+      return false;
+    }
   }
 
   private WebElement waitForElementPresent(By locator, String errorMessage, long timeOutInSeconds) {
