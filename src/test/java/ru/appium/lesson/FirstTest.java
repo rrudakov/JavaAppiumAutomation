@@ -34,23 +34,26 @@ public class FirstTest {
   private static final By SEARCH_INPUT_BY_ID = By.id("org.wikipedia:id/search_src_text");
   private static final By SEARCH_INPUT = By.xpath("//*[contains(@text, 'Search…')]");
   private static final By BACK_BUTTON =
-      By.xpath(
-          "//*[@resource-id='org.wikipedia:id/search_toolbar']/android.widget.ImageButton");
+      By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']/android.widget.ImageButton");
   private static final By RESULT_JAVA =
       By.xpath(
           "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']");
-  private static final By RESULT_APPIUM = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title' and @text='Appium']");
+  private static final By RESULT_APPIUM =
+      By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title' and @text='Appium']");
   private static final By ARTICLE_TITLE = By.id("org.wikipedia:id/view_page_title_text");
   private static final By ARTICLE_APPIUM_FOOTER = By.xpath("//*[@text='View page in browser']");
   private static final By SEARCH_RESULTS =
       By.xpath(
           "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']");
-  private static final By MORE_OPTIONS = By.xpath("//android.widget.ImageView[@content-desc='More options']");
+  private static final By MORE_OPTIONS =
+      By.xpath("//android.widget.ImageView[@content-desc='More options']");
   private static final By GOT_IT = By.id("org.wikipedia:id/onboarding_button");
-  private static final By CREATE_LIST = By.xpath("//*[@resource-id='org.wikipedia:id/create_button']");
+  private static final By CREATE_LIST =
+      By.xpath("//*[@resource-id='org.wikipedia:id/create_button']");
   private static final By LIST_NAME_INPUT = By.id("org.wikipedia:id/text_input");
   private static final By OK_BUTTON = By.id("android:id/button1");
-  private static final By CLOSE_BUTTON = By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']");
+  private static final By CLOSE_BUTTON =
+      By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']");
   private static final By SAVED_ITEMS =
       By.xpath(
           "//*[@resource-id='org.wikipedia:id/fragment_main_nav_tab_layout']//android.widget.FrameLayout[2]");
@@ -127,17 +130,33 @@ public class FirstTest {
     this.openAppAndSearch("Java");
     waitForElementAndClick(RESULT_JAVA, "Can't find 'Java' article", DEFAULT_TIMEOUT);
     waitForElementAndClick(MORE_OPTIONS, "Can't find 'More options' button", DEFAULT_TIMEOUT);
-    waitForElementAndClick(this.byText("Add to reading list"), "Can't find 'Add to reading list' item", DEFAULT_TIMEOUT);
+    waitForElementAndClick(
+        this.byText("Add to reading list"),
+        "Can't find 'Add to reading list' item",
+        DEFAULT_TIMEOUT);
     waitForElementAndClick(GOT_IT, "Can't find 'Got it!' button", DEFAULT_TIMEOUT);
     waitForElementAndClick(CREATE_LIST, "Can't find 'Create list' button", DEFAULT_TIMEOUT);
     waitForElementAndClear(LIST_NAME_INPUT, "Can't find 'List name' input field", DEFAULT_TIMEOUT);
-    waitForElementAndSendKeys(LIST_NAME_INPUT, listName, String.format("Can't fill in 'List name' input with text '%s'", listName), DEFAULT_TIMEOUT);
+    waitForElementAndSendKeys(
+        LIST_NAME_INPUT,
+        listName,
+        String.format("Can't fill in 'List name' input with text '%s'", listName),
+        DEFAULT_TIMEOUT);
     waitForElementAndClick(OK_BUTTON, "Can't find 'OK' button", DEFAULT_TIMEOUT);
     waitForElementAndClick(CLOSE_BUTTON, "Can't find 'Close' button", DEFAULT_TIMEOUT);
     waitForElementAndClick(SAVED_ITEMS, "Can't find 'Saved items' button", DEFAULT_TIMEOUT);
-    waitForElementAndClick(this.byText(listName), String.format("Can't find saved list with name '%s'", listName), DEFAULT_TIMEOUT);
+    waitForElementAndClick(
+        this.byText(listName),
+        String.format("Can't find saved list with name '%s'", listName),
+        DEFAULT_TIMEOUT);
     swipeElementToLeft(this.byText(articleTitle), "Can't find saved article");
-    waitForElementNotPresent(By.xpath(String.format("//*[@resource-id='org.wikipedia:id/page_list_item_container'][//*[@text='%s']]", articleTitle)), "Can't delete saved article", DEFAULT_TIMEOUT);
+    waitForElementNotPresent(
+        By.xpath(
+            String.format(
+                "//*[@resource-id='org.wikipedia:id/page_list_item_container'][//*[@text='%s']]",
+                articleTitle)),
+        "Can't delete saved article",
+        DEFAULT_TIMEOUT);
   }
 
   @Test
@@ -151,25 +170,48 @@ public class FirstTest {
     this.openAppAndSearch(firstsearchText);
     waitForElementAndClick(RESULT_JAVA, "Can't find 'Java' article", DEFAULT_TIMEOUT);
     waitForElementAndClick(MORE_OPTIONS, "Can't find 'More options' button", DEFAULT_TIMEOUT);
-    waitForElementAndClick(this.byText("Add to reading list"), "Can't find 'Add to reading list' item", DEFAULT_TIMEOUT);
+    waitForElementAndClick(
+        this.byText("Add to reading list"),
+        "Can't find 'Add to reading list' item",
+        DEFAULT_TIMEOUT);
     waitForElementAndClick(GOT_IT, "Can't find 'Got it!' button", DEFAULT_TIMEOUT);
     waitForElementAndClick(CREATE_LIST, "Can't find 'Create list' button", DEFAULT_TIMEOUT);
     waitForElementAndClear(LIST_NAME_INPUT, "Can't find 'List name' input field", DEFAULT_TIMEOUT);
-    waitForElementAndSendKeys(LIST_NAME_INPUT, listName, String.format("Can't fill in 'List name' input with text '%s'", listName), DEFAULT_TIMEOUT);
+    waitForElementAndSendKeys(
+        LIST_NAME_INPUT,
+        listName,
+        String.format("Can't fill in 'List name' input with text '%s'", listName),
+        DEFAULT_TIMEOUT);
     waitForElementAndClick(OK_BUTTON, "Can't find 'OK' button", DEFAULT_TIMEOUT);
     waitForElementAndClick(CLOSE_BUTTON, "Can't find 'Close' button", DEFAULT_TIMEOUT);
     waitForElementAndClick(SEARCH_INIT, "Can't find 'Search wikipedia' input", DEFAULT_TIMEOUT);
-    waitForElementAndSendKeys(SEARCH_INPUT, secondSearchText, "Can't find 'Search' input", DEFAULT_TIMEOUT);
+    waitForElementAndSendKeys(
+        SEARCH_INPUT, secondSearchText, "Can't find 'Search' input", DEFAULT_TIMEOUT);
     waitForElementAndClick(RESULT_APPIUM, "Can't find 'Appium' article", DEFAULT_TIMEOUT);
     waitForElementAndClick(MORE_OPTIONS, "Can't find 'More options' button", DEFAULT_TIMEOUT);
-    waitForElementAndClick(this.byText("Add to reading list"), "Can't find 'Add to reading list' item", DEFAULT_TIMEOUT);
-    waitForElementAndClick(this.byText(listName), String.format("Can't find reading list with name '%s'", listName), DEFAULT_TIMEOUT);
+    waitForElementAndClick(
+        this.byText("Add to reading list"),
+        "Can't find 'Add to reading list' item",
+        DEFAULT_TIMEOUT);
+    waitForElementAndClick(
+        this.byText(listName),
+        String.format("Can't find reading list with name '%s'", listName),
+        DEFAULT_TIMEOUT);
     waitForElementAndClick(CLOSE_BUTTON, "Can't find 'Close' button", DEFAULT_TIMEOUT);
     waitForElementAndClick(SAVED_ITEMS, "Can't find 'Saved items' button", DEFAULT_TIMEOUT);
-    waitForElementAndClick(this.byText(listName), String.format("Can't find saved list with name '%s'", listName), DEFAULT_TIMEOUT);
-    swipeElementToLeft(this.byText(firstArticleTitle), String.format("Can't find saved article with name '%s'", firstArticleTitle));
-    waitForElementAndClick(this.byText(secondArticleTitle), String.format("Can't find saved article with title '%s'", secondArticleTitle), DEFAULT_TIMEOUT);
-    String title = waitForElementAndGetAttribure(ARTICLE_TITLE, "text", "Can't find article title", 15);
+    waitForElementAndClick(
+        this.byText(listName),
+        String.format("Can't find saved list with name '%s'", listName),
+        DEFAULT_TIMEOUT);
+    swipeElementToLeft(
+        this.byText(firstArticleTitle),
+        String.format("Can't find saved article with name '%s'", firstArticleTitle));
+    waitForElementAndClick(
+        this.byText(secondArticleTitle),
+        String.format("Can't find saved article with title '%s'", secondArticleTitle),
+        DEFAULT_TIMEOUT);
+    String title =
+        waitForElementAndGetAttribure(ARTICLE_TITLE, "text", "Can't find article title", 15);
 
     Assert.assertEquals("Wrong article title", secondArticleTitle, title);
   }
@@ -178,7 +220,8 @@ public class FirstTest {
   public void testAmountOfNonEmptySearch() {
     String searchText = "Linkin park discograghy";
     this.openAppAndSearch(searchText);
-    waitForElementPresent(SEARCH_RESULTS, String.format("Can't find anything by request '%s'", searchText));
+    waitForElementPresent(
+        SEARCH_RESULTS, String.format("Can't find anything by request '%s'", searchText));
     int amountOfSearchResults = this.getAmountOfElements(SEARCH_RESULTS);
 
     Assert.assertTrue("Too few search results", amountOfSearchResults > 0);
@@ -188,8 +231,11 @@ public class FirstTest {
   public void testAmountOfEmptySearch() {
     String searchText = "lksjdfkajhsdlkfjhasd";
     this.openAppAndSearch(searchText);
-    waitForElementPresent(this.byText("No results found"), String.format("Can't find empty results label by text '%s'", searchText));
-    this.assertElementNotPresent(SEARCH_RESULTS, String.format("We've found some results by request: %s", searchText));
+    waitForElementPresent(
+        this.byText("No results found"),
+        String.format("Can't find empty results label by text '%s'", searchText));
+    this.assertElementNotPresent(
+        SEARCH_RESULTS, String.format("We've found some results by request: %s", searchText));
   }
 
   @Test
@@ -198,19 +244,29 @@ public class FirstTest {
     this.openAppAndSearch(searchText);
     waitForElementAndClick(RESULT_JAVA, "Can't find 'Java' article", 15);
 
-    String titleBeforeRotation = this.waitForElementAndGetAttribure(ARTICLE_TITLE, "text", "Can't find title of article", DEFAULT_TIMEOUT);
+    String titleBeforeRotation =
+        this.waitForElementAndGetAttribure(
+            ARTICLE_TITLE, "text", "Can't find title of article", DEFAULT_TIMEOUT);
 
     driver.rotate(ScreenOrientation.LANDSCAPE);
 
-    String titleAfterRotation = this.waitForElementAndGetAttribure(ARTICLE_TITLE, "text", "Can't find title of article", DEFAULT_TIMEOUT);
+    String titleAfterRotation =
+        this.waitForElementAndGetAttribure(
+            ARTICLE_TITLE, "text", "Can't find title of article", DEFAULT_TIMEOUT);
 
-    Assert.assertEquals("Article title has been changed after rotation", titleBeforeRotation, titleAfterRotation);
+    Assert.assertEquals(
+        "Article title has been changed after rotation", titleBeforeRotation, titleAfterRotation);
 
     driver.rotate(ScreenOrientation.PORTRAIT);
 
-    String titleAfterSecondRotation = this.waitForElementAndGetAttribure(ARTICLE_TITLE, "text", "Can't find title of article", DEFAULT_TIMEOUT);
+    String titleAfterSecondRotation =
+        this.waitForElementAndGetAttribure(
+            ARTICLE_TITLE, "text", "Can't find title of article", DEFAULT_TIMEOUT);
 
-    Assert.assertEquals("Article title has been changed after second rotation", titleBeforeRotation, titleAfterSecondRotation);
+    Assert.assertEquals(
+        "Article title has been changed after second rotation",
+        titleBeforeRotation,
+        titleAfterSecondRotation);
   }
 
   @Test
@@ -221,7 +277,8 @@ public class FirstTest {
 
     driver.runAppInBackground(2);
 
-    waitForElementPresent(RESULT_JAVA, "Can't find 'Java' article after returning from background", 15);
+    waitForElementPresent(
+        RESULT_JAVA, "Can't find 'Java' article after returning from background", 15);
   }
 
   @Test
@@ -278,15 +335,29 @@ public class FirstTest {
     String searchText = "Java";
     this.openAppAndSearch(searchText);
     waitForElementAndClick(RESULT_JAVA, "Can't find 'Java' article", 15);
-    Assert.assertTrue("Article title is not present", isElementCurrentlyVisible(ARTICLE_TITLE));
+    // Assert.assertTrue("Article title is not present", isElementCurrentlyVisible(ARTICLE_TITLE));
+    assertElementPresent(ARTICLE_TITLE, "Article title is not present");
   }
 
   private void openAppAndSearch(String searchText) {
     waitForElementAndClick(SKIP_BUTTON, "Can't find skip button", DEFAULT_TIMEOUT);
     waitForElementAndClick(SEARCH_INIT, "Can't find 'Search wikipedia' input", DEFAULT_TIMEOUT);
-    waitForElementAndSendKeys(SEARCH_INPUT, searchText, "Can't find 'Search' input", DEFAULT_TIMEOUT);
+    waitForElementAndSendKeys(
+        SEARCH_INPUT, searchText, "Can't find 'Search' input", DEFAULT_TIMEOUT);
   }
 
+  private void assertElementPresent(By locator, String errorMessage) {
+    int amountOfElements = this.getAmountOfElements(locator);
+
+    if (amountOfElements == 0) {
+      throw new AssertionError(
+          String.format(
+              "An element %s should not be present. %s", locator.toString(), errorMessage));
+    }
+  }
+
+  // Этот метод я изначально написал для задания, testAssertElementPresent всего лишь тест, который
+  // использует этот метод
   private boolean isElementCurrentlyVisible(By locator) {
     try {
       WebElement element = waitForElementPresent(locator, "Ignore error", 0);
@@ -347,12 +418,7 @@ public class FirstTest {
     int y_start = (int) (size.getHeight() * 0.8);
     int y_end = (int) (size.getHeight() * 0.2);
 
-    action
-      .press(x, y_start)
-      .waitAction(timeOfSwipe)
-      .moveTo(x, y_end)
-      .release()
-      .perform();
+    action.press(x, y_start).waitAction(timeOfSwipe).moveTo(x, y_end).release().perform();
   }
 
   protected void swipeUpQuick() {
@@ -364,7 +430,8 @@ public class FirstTest {
 
     while (driver.findElements(locator).size() == 0) {
       if (alreadySwiped > maxSwipes) {
-        this.waitForElementsPresent(locator, String.format("Can't find element by swiping up.\n%s", errorMessage), 0);
+        this.waitForElementsPresent(
+            locator, String.format("Can't find element by swiping up.\n%s", errorMessage), 0);
         return;
       }
 
@@ -380,12 +447,7 @@ public class FirstTest {
     int rightX = leftX + element.getSize().getWidth();
     System.out.printf("MIddleY: %d, RightX: %d, LeftX: %d\n", middleY, rightX, leftX);
     TouchAction action = new TouchAction(driver);
-    action
-      .press(rightX, middleY)
-      .waitAction(800)
-      .moveTo(leftX, middleY)
-      .release()
-      .perform();
+    action.press(rightX, middleY).waitAction(800).moveTo(leftX, middleY).release().perform();
   }
 
   private int getAmountOfElements(By locator) {
@@ -397,13 +459,14 @@ public class FirstTest {
     int amountOfElements = this.getAmountOfElements(locator);
 
     if (amountOfElements > 0) {
-      throw new AssertionError(String.format("An element %s supposed to be present. %s",
-                                             locator.toString(),
-                                             errorMessage));
+      throw new AssertionError(
+          String.format(
+              "An element %s supposed to be present. %s", locator.toString(), errorMessage));
     }
   }
 
-  private String waitForElementAndGetAttribure(By locator, String attribureName, String errorMessage, long timeOutInSecond) {
+  private String waitForElementAndGetAttribure(
+      By locator, String attribureName, String errorMessage, long timeOutInSecond) {
     WebElement element = this.waitForElementPresent(locator, errorMessage, timeOutInSecond);
     return element.getAttribute(attribureName);
   }
