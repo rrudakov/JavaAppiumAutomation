@@ -35,4 +35,16 @@ public class CoreTestCase extends TestCase {
     driver.quit();
     super.tearDown();
   }
+
+  protected void rotateScreenPortrait() {
+    this.driver.rotate(ScreenOrientation.PORTRAIT);
+  }
+
+  protected void rotateScreenLandscape() {
+    this.driver.rotate(ScreenOrientation.LANDSCAPE);
+  }
+
+  protected void backgroundApp(int seconds) {
+    this.driver.runAppInBackground(seconds);
+  }
 }
