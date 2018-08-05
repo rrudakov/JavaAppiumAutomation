@@ -65,28 +65,15 @@ public class MyListsTests extends CoreTestCase {
     this.search.initSearchInput();
     this.search.typeSearchLine(secondSearchText);
     this.search.clickByArticleWithSubstring("Appium");
-    
-    this.mainPage.waitForElementAndClick(MORE_OPTIONS, "Can't find 'More options' button");
-    this.mainPage.waitForElementAndClick(
-        this.mainPage.byText("Add to reading list"), "Can't find 'Add to reading list' item");
-    this.mainPage.waitForElementAndClick(
-        this.mainPage.byText(listName),
-        String.format("Can't find reading list with name '%s'", listName));
-    this.mainPage.waitForElementAndClick(CLOSE_BUTTON, "Can't find 'Close' button");
-    this.mainPage.waitForElementAndClick(SAVED_ITEMS, "Can't find 'Saved items' button");
-    this.mainPage.waitForElementAndClick(
-        this.mainPage.byText(listName),
-        String.format("Can't find saved list with name '%s'", listName));
-    this.mainPage.swipeElementToLeft(
-        this.mainPage.byText(firstArticleTitle),
-        String.format("Can't find saved article with name '%s'", firstArticleTitle));
-    this.mainPage.waitForElementAndClick(
-        this.mainPage.byText(secondArticleTitle),
-        String.format("Can't find saved article with title '%s'", secondArticleTitle));
-    String title =
-        this.mainPage.waitForElementAndGetAttribure(
-            ARTICLE_TITLE, "text", "Can't find article title", 15);
+    this.article.waitForTitleElement();
+    this.article.addArticleToExistingList(listName);
+    this.article.closeArticle();
 
+    this.navigation.clickMyLists();
+    this.myLists.openFolderByName(listName);
+    this.myLists.swipeByArticleToDelete(firstArticleTitle);
+    this.myLists.openArticleFromSavedFolderByTitle(secondArticleTitle);
+    String title = this.article.getArticleTitle();
     assertEquals("Wrong article title", secondArticleTitle, title);
   }
 }

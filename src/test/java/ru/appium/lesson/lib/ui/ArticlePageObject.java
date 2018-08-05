@@ -33,6 +33,7 @@ public class ArticlePageObject extends MainPageObject {
 
   public void addArticleToMyList(String nameOfFolder) {
     this.waitForElementAndClick(MORE_OPTIONS, "Can't find 'More options' button");
+    this.waitForElementsPresent(this.byText("Add to reading list"), "Can't find 'Add to reading list' item");
     this.waitForElementAndClick(
         this.byText("Add to reading list"), "Can't find 'Add to reading list' item");
     this.waitForElementAndClick(GOT_IT, "Can't find 'Got it!' button");
@@ -47,5 +48,15 @@ public class ArticlePageObject extends MainPageObject {
 
   public void closeArticle() {
     this.waitForElementAndClick(CLOSE_BUTTON, "Can't find 'Close' button");
+  }
+
+  public void addArticleToExistingList(String nameOfFolder) {
+    this.waitForElementAndClick(MORE_OPTIONS, "Can't find 'More options' button");
+    this.waitForElementsPresent(this.byText("Add to reading list"), "Can't find 'Add to reading list' item");
+    this.waitForElementAndClick(
+        this.byText("Add to reading list"), "Can't find 'Add to reading list' item");
+    this.waitForElementAndClick(
+        this.byText(nameOfFolder),
+        String.format("Can't find reading list with name '%s'", nameOfFolder));
   }
 }

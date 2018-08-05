@@ -1,5 +1,8 @@
 package ru.appium.lesson.lib.ui;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -12,9 +15,9 @@ public class SearchPageObject extends MainPageObject {
       SEARCH_CANCEL_BUTTON = By.id("org.wikipedia:id/search_close_btn"),
       SEARCH_RESULTS =
           By.xpath(
-              "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']");;
+              "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']");
   private static final String SEARCH_RESULT_BY_SUBSTRING_TPL =
-      "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']";
+      "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='{SUBSTRING}']";
 
   public SearchPageObject(AppiumDriver<WebElement> driver) {
     super(driver);
@@ -71,5 +74,18 @@ public class SearchPageObject extends MainPageObject {
 
   public void assertThereIsNoResultOfSearch() {
     this.assertElementNotPresent(SEARCH_RESULTS, "We supposed not to find any results");
+  }
+
+  public String getSearchInputPlaceholder() {
+    return this.waitForElementPresent(SEARCH_INPUT_BY_ID, "Can't find 'Search' input")
+        .getAttribute("text");
+  }
+
+  public List<String> searchResultTitles() {
+    List<WebElement> titleElements =
+        this.waitForElementsPresent(SEARCH_RESULTS, "Can't find anything by the request");
+    return titleElements.stream()
+        .map(title -> title.getAttribute("text"))
+        .collect(Collectors.toList());
   }
 }

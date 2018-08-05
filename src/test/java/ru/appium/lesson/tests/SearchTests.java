@@ -1,12 +1,10 @@
 package ru.appium.lesson.tests;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import ru.appium.lesson.lib.CoreTestCase;
 import ru.appium.lesson.lib.ui.ArticlePageObject;
+import ru.appium.lesson.lib.ui.NavigationUI;
 import ru.appium.lesson.lib.ui.SearchPageObject;
 import ru.appium.lesson.lib.ui.WelcomePageObject;
 
@@ -14,13 +12,15 @@ public class SearchTests extends CoreTestCase {
   private WelcomePageObject welcome;
   private SearchPageObject search;
   private ArticlePageObject article;
+  private NavigationUI navigation;
 
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    this.welcome = new WelcomePageObject(driver);
+    this.welcome = new WelcomePageObject(this.driver);
     this.search = new SearchPageObject(this.driver);
-    this.article = new ArticlePageObject(driver);
+    this.article = new ArticlePageObject(this.driver);
+    this.navigation = new NavigationUI(this.driver);
   }
 
   @Test
@@ -66,11 +66,7 @@ public class SearchTests extends CoreTestCase {
   public void testCheckSearchPlaceholder() {
     this.welcome.skipWelcome();
     this.search.initSearchInput();
-
-    WebElement searchInputElement =
-        this.mainPage.waitForElementPresent(SEARCH_INPUT_BY_ID, "Can't find 'Search' input");
-
-    String placeholder = searchInputElement.getAttribute("text");
+    String placeholder = this.search.getSearchInputPlaceholder();
 
     assertEquals("Wrong placeholder in Search input", "Search…", placeholder);
   }
@@ -81,12 +77,8 @@ public class SearchTests extends CoreTestCase {
     this.search.initSearchInput();
     this.search.typeSearchLine("Java");
     int amountOfSearchResults = this.search.getAmountOfFoundArticles();
-
     assertTrue("Too few search results", amountOfSearchResults > 1);
-
-    // В новой версии приложения нет крестика в поле ввода 'Search...' поэтому я нажимаю кнопку со
-    // стрелочкой
-    this.mainPage.waitForElementAndClick(BACK_BUTTON, "Can't find 'Back' button");
+    this.navigation.clickBackButton();
     this.search.assertThereIsNoResultOfSearch();
     ;
   }
@@ -97,19 +89,13 @@ public class SearchTests extends CoreTestCase {
     this.welcome.skipWelcome();
     this.search.initSearchInput();
     this.search.typeSearchLine(searchText);
-    List<WebElement> resultElements =
-        this.mainPage.waitForElementsPresent(SEARCH_RESULTS, "No search results");
+    int searchResultCounter = this.search.getAmountOfFoundArticles();
+    assertTrue("Too few search results", searchResultCounter > 1);
 
-    assertTrue("Too few search results", resultElements.size() > 1);
-
-    for (WebElement result : resultElements) {
-      WebElement titleElement = result.findElement(By.id("org.wikipedia:id/page_list_item_title"));
-      String title = titleElement.getAttribute("text");
-
-      assertThat(
+    for (String title : this.search.searchResultTitles()) {
+      assertTrue(
           String.format("Search result doesn't contains string '%s'", searchText),
-          title,
-          CoreMatchers.containsString(searchText));
+          title.contains(searchText));
     }
   }
 

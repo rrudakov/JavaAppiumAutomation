@@ -7,7 +7,7 @@ import io.appium.java_client.AppiumDriver;
 
 public class MyListsPageObject extends MainPageObject {
   private static final String ARTICLE_BY_TITLE_TPL =
-      "//*[@resource-id='org.wikipedia:id/page_list_item_container'][//*[@text='{TITLE}']]";
+      "//*[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{TITLE}']";
 
   public MyListsPageObject(AppiumDriver<WebElement> driver) {
     super(driver);
@@ -37,5 +37,11 @@ public class MyListsPageObject extends MainPageObject {
   public void waitForArticleToDisappearByTitle(String articleTitle) {
     this.waitForElementNotPresent(
         getSavedArticleXpathByTitle(articleTitle), "Can't delete saved article", 15);
+  }
+
+  public void openArticleFromSavedFolderByTitle(String articleTitle) {
+    this.waitForElementAndClick(
+        this.byText(articleTitle),
+        String.format("Can't find saved article with title '%s'", articleTitle));
   }
 }
