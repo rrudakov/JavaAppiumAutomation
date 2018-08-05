@@ -16,15 +16,26 @@ public class SearchPageObject extends MainPageObject {
       SEARCH_RESULTS =
           By.xpath(
               "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']");
-  private static final String SEARCH_RESULT_BY_SUBSTRING_TPL =
-      "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='{SUBSTRING}']";
+  private static final String
+      SEARCH_RESULT_BY_SUBSTRING_TPL =
+          "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='{SUBSTRING}']",
+      SEARCH_RESULT_BY_TITLE_AND_DESC_TPL =
+          "//*[./*[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{TITLE}'] and ./*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{DESCRIPTION}']]";
 
   public SearchPageObject(AppiumDriver<WebElement> driver) {
     super(driver);
   }
 
-  private static By getResulSearchLocator(String substring) {
+  /** Fix xpath by template. */
+  private static By getResultSearchLocator(String substring) {
     return By.xpath(SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring));
+  }
+
+  private static By getResultSearchLocator(String title, String description) {
+    return By.xpath(
+        SEARCH_RESULT_BY_TITLE_AND_DESC_TPL
+            .replace("{TITLE}", title)
+            .replace("{DESCRIPTION}", description));
   }
 
   public void initSearchInput() {
@@ -38,14 +49,22 @@ public class SearchPageObject extends MainPageObject {
 
   public void waitSearchResult(String substring) {
     this.waitForElementPresent(
-        getResulSearchLocator(substring),
+        getResultSearchLocator(substring),
         String.format("Can't find '%s' in search result", substring),
+        15);
+  }
+
+  public void waitForElementByTitleAndDescription(String title, String description) {
+    this.waitForElementPresent(
+        getResultSearchLocator(title, description),
+        String.format(
+            "Can't find element with title '%s' and description '%s'", title, description),
         15);
   }
 
   public void clickByArticleWithSubstring(String substring) {
     this.waitForElementAndClick(
-        getResulSearchLocator(substring),
+        getResultSearchLocator(substring),
         String.format("Can't find and click '%s' in search result", substring),
         15);
   }

@@ -1,5 +1,9 @@
 package ru.appium.lesson.tests;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import ru.appium.lesson.lib.CoreTestCase;
@@ -107,5 +111,25 @@ public class SearchTests extends CoreTestCase {
     this.search.typeSearchLine(searchText);
     this.search.clickByArticleWithSubstring("Object-oriented programming language");
     this.article.waitForTitleElement();
+  }
+
+  @Test
+  public void testSearchByTitleAndDesc() {
+    String searchText = "Binary";
+    this.welcome.skipWelcome();
+    this.search.initSearchInput();
+    this.search.typeSearchLine(searchText);
+
+    List<Pair<String, String>> results = new ArrayList<>();
+    results.add(
+        Pair.of("Binary", "Disambiguation page providing links to articles with similar titles"));
+    results.add(
+        Pair.of(
+            "Binary number", "System that represents numeric values using two symbols; 0 and 1"));
+    results.add(Pair.of("Binary star", "Star system consisting of two stars"));
+
+    for (Pair<String, String> result : results) {
+      this.search.waitForElementByTitleAndDescription(result.getLeft(), result.getRight());
+    }
   }
 }
