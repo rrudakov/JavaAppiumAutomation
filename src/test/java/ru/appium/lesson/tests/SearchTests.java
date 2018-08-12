@@ -7,10 +7,15 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import ru.appium.lesson.lib.CoreTestCase;
+import ru.appium.lesson.lib.Platform;
 import ru.appium.lesson.lib.ui.ArticlePageObject;
 import ru.appium.lesson.lib.ui.NavigationUI;
 import ru.appium.lesson.lib.ui.SearchPageObject;
 import ru.appium.lesson.lib.ui.WelcomePageObject;
+import ru.appium.lesson.lib.ui.factories.ArticlePageObjectFactory;
+import ru.appium.lesson.lib.ui.factories.NavigationUIFactory;
+import ru.appium.lesson.lib.ui.factories.SearchPageObjectFactory;
+import ru.appium.lesson.lib.ui.factories.WelcomePageObjectFactory;
 
 public class SearchTests extends CoreTestCase {
   private WelcomePageObject welcome;
@@ -21,10 +26,10 @@ public class SearchTests extends CoreTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    this.welcome = new WelcomePageObject(this.driver);
-    this.search = new SearchPageObject(this.driver);
-    this.article = new ArticlePageObject(this.driver);
-    this.navigation = new NavigationUI(this.driver);
+    this.welcome = WelcomePageObjectFactory.get(this.driver);
+    this.search = SearchPageObjectFactory.get(this.driver);
+    this.article = ArticlePageObjectFactory.get(this.driver);
+    this.navigation = NavigationUIFactory.get(this.driver);
   }
 
   @Test
@@ -68,6 +73,7 @@ public class SearchTests extends CoreTestCase {
 
   @Test
   public void testCheckSearchPlaceholder() {
+    if (Platform.getInstance().isIOS()) return;
     this.welcome.skipWelcome();
     this.search.initSearchInput();
     String placeholder = this.search.getSearchInputPlaceholder();

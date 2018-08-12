@@ -4,16 +4,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import io.appium.java_client.AppiumDriver;
+import ru.appium.lesson.lib.Platform;
 
-public class ArticlePageObject extends MainPageObject {
-  private static final By ARTICLE_TITLE = By.id("org.wikipedia:id/view_page_title_text"),
-      FOOTER_ELEMENT = By.xpath("//*[@text='View page in browser']"),
-      MORE_OPTIONS = By.xpath("//android.widget.ImageView[@content-desc='More options']"),
-      GOT_IT = By.id("org.wikipedia:id/onboarding_button"),
-      CREATE_LIST = By.xpath("//*[@resource-id='org.wikipedia:id/create_button']"),
-      LIST_NAME_INPUT = By.id("org.wikipedia:id/text_input"),
-      OK_BUTTON = By.id("android:id/button1"),
-      CLOSE_BUTTON = By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']");
+public abstract class ArticlePageObject extends MainPageObject {
+  protected static By ARTICLE_TITLE,
+      FOOTER_ELEMENT,
+      MORE_OPTIONS,
+      OPTIONS_ADD_TO_MY_LIST,
+      GOT_IT,
+      CREATE_LIST,
+      LIST_NAME_INPUT,
+      OK_BUTTON,
+      CLOSE_BUTTON,
+      CLOSE_SYNC_BUTTON;
 
   public ArticlePageObject(AppiumDriver<WebElement> driver) {
     super(driver);
@@ -24,16 +27,21 @@ public class ArticlePageObject extends MainPageObject {
   }
 
   public String getArticleTitle() {
-    return this.waitForTitleElement().getAttribute("text");
+    WebElement titleElement = this.waitForTitleElement();
+    if (Platform.getInstance().isAndroid()) return titleElement.getAttribute("text");
+    else return titleElement.getAttribute("name");
   }
 
   public void swipeToFooter() {
-    this.swipeUpToFindElement(FOOTER_ELEMENT, "Can't find the end of article", 20);
+    String error = "Can't find the end of article";
+    if (Platform.getInstance().isAndroid()) this.swipeUpToFindElement(FOOTER_ELEMENT, error, 40);
+    else this.swipeTillElementAppear(FOOTER_ELEMENT, error, 40);
   }
 
   public void addArticleToMyList(String nameOfFolder) {
     this.waitForElementAndClick(MORE_OPTIONS, "Can't find 'More options' button");
-    this.waitForElementsPresent(this.byText("Add to reading list"), "Can't find 'Add to reading list' item");
+    this.waitForElementsPresent(
+        this.byText("Add to reading list"), "Can't find 'Add to reading list' item");
     this.waitForElementAndClick(
         this.byText("Add to reading list"), "Can't find 'Add to reading list' item");
     this.waitForElementAndClick(GOT_IT, "Can't find 'Got it!' button");
@@ -50,9 +58,15 @@ public class ArticlePageObject extends MainPageObject {
     this.waitForElementAndClick(CLOSE_BUTTON, "Can't find 'Close' button");
   }
 
+  public void addArticleToMySaved() {
+    this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST, "Can't find save to by list button");
+    this.waitForElementAndClick(CLOSE_SYNC_BUTTON, "Can't find close sync button");
+  }
+
   public void addArticleToExistingList(String nameOfFolder) {
     this.waitForElementAndClick(MORE_OPTIONS, "Can't find 'More options' button");
-    this.waitForElementsPresent(this.byText("Add to reading list"), "Can't find 'Add to reading list' item");
+    this.waitForElementsPresent(
+        this.byText("Add to reading list"), "Can't find 'Add to reading list' item");
     this.waitForElementAndClick(
         this.byText("Add to reading list"), "Can't find 'Add to reading list' item");
     this.waitForElementAndClick(

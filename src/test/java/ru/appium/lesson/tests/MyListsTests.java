@@ -3,11 +3,17 @@ package ru.appium.lesson.tests;
 import org.junit.Test;
 
 import ru.appium.lesson.lib.CoreTestCase;
+import ru.appium.lesson.lib.Platform;
 import ru.appium.lesson.lib.ui.ArticlePageObject;
 import ru.appium.lesson.lib.ui.MyListsPageObject;
 import ru.appium.lesson.lib.ui.NavigationUI;
 import ru.appium.lesson.lib.ui.SearchPageObject;
 import ru.appium.lesson.lib.ui.WelcomePageObject;
+import ru.appium.lesson.lib.ui.factories.ArticlePageObjectFactory;
+import ru.appium.lesson.lib.ui.factories.MyListsPageObjectFactory;
+import ru.appium.lesson.lib.ui.factories.NavigationUIFactory;
+import ru.appium.lesson.lib.ui.factories.SearchPageObjectFactory;
+import ru.appium.lesson.lib.ui.factories.WelcomePageObjectFactory;
 
 public class MyListsTests extends CoreTestCase {
   private WelcomePageObject welcome;
@@ -19,11 +25,11 @@ public class MyListsTests extends CoreTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    this.welcome = new WelcomePageObject(driver);
-    this.search = new SearchPageObject(this.driver);
-    this.article = new ArticlePageObject(driver);
-    this.navigation = new NavigationUI(driver);
-    this.myLists = new MyListsPageObject(driver);
+    this.welcome = WelcomePageObjectFactory.get(this.driver);
+    this.search = SearchPageObjectFactory.get(this.driver);
+    this.article = ArticlePageObjectFactory.get(this.driver);
+    this.navigation = NavigationUIFactory.get(this.driver);
+    this.myLists = MyListsPageObjectFactory.get(this.driver);
   }
 
   @Test
@@ -38,10 +44,15 @@ public class MyListsTests extends CoreTestCase {
     this.search.typeSearchLine(searchText);
     this.search.clickByArticleWithSubstring(articleTitleSearch);
     this.article.waitForTitleElement();
-    this.article.addArticleToMyList(listName);
+
+    if (Platform.getInstance().isAndroid()) this.article.addArticleToMyList(listName);
+    else this.article.addArticleToMySaved();
+
     this.article.closeArticle();
     this.navigation.clickMyLists();
-    this.myLists.openFolderByName(listName);
+
+    if (Platform.getInstance().isAndroid()) this.myLists.openFolderByName(listName);
+
     this.myLists.swipeByArticleToDelete(articleTitle);
     this.myLists.waitForArticleToDisappearByTitle(articleTitle);
   }

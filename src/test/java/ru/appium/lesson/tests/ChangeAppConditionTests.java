@@ -6,6 +6,9 @@ import ru.appium.lesson.lib.CoreTestCase;
 import ru.appium.lesson.lib.ui.ArticlePageObject;
 import ru.appium.lesson.lib.ui.SearchPageObject;
 import ru.appium.lesson.lib.ui.WelcomePageObject;
+import ru.appium.lesson.lib.ui.factories.ArticlePageObjectFactory;
+import ru.appium.lesson.lib.ui.factories.SearchPageObjectFactory;
+import ru.appium.lesson.lib.ui.factories.WelcomePageObjectFactory;
 
 public class ChangeAppConditionTests extends CoreTestCase {
   private WelcomePageObject welcome;
@@ -15,9 +18,9 @@ public class ChangeAppConditionTests extends CoreTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    this.welcome = new WelcomePageObject(driver);
-    this.search = new SearchPageObject(this.driver);
-    this.article = new ArticlePageObject(driver);
+    this.welcome = WelcomePageObjectFactory.get(this.driver);
+    this.search = SearchPageObjectFactory.get(this.driver);
+    this.article = ArticlePageObjectFactory.get(this.driver);
   }
 
   @Test

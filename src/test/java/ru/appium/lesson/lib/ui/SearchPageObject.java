@@ -7,20 +7,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import io.appium.java_client.AppiumDriver;
+import ru.appium.lesson.lib.Platform;
 
-public class SearchPageObject extends MainPageObject {
-  private static final By SEARCH_INIT = By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-      SEARCH_INPUT = By.xpath("//*[contains(@text, 'Search…')]"),
-      SEARCH_INPUT_BY_ID = By.id("org.wikipedia:id/search_src_text"),
-      SEARCH_CANCEL_BUTTON = By.id("org.wikipedia:id/search_close_btn"),
-      SEARCH_RESULTS =
-          By.xpath(
-              "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']");
-  private static final String
-      SEARCH_RESULT_BY_SUBSTRING_TPL =
-          "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='{SUBSTRING}']",
-      SEARCH_RESULT_BY_TITLE_AND_DESC_TPL =
-          "//*[./*[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{TITLE}'] and ./*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{DESCRIPTION}']]";
+public abstract class SearchPageObject extends MainPageObject {
+  protected static By SEARCH_INIT,
+      SEARCH_INPUT,
+      SEARCH_INPUT_BY_ID,
+      SEARCH_CANCEL_BUTTON,
+      SEARCH_RESULTS,
+      SEARCH_EMPTY_RESULT_LABEL;
+  protected static String SEARCH_RESULT_BY_SUBSTRING_TPL, SEARCH_RESULT_BY_TITLE_AND_DESC_TPL;
 
   public SearchPageObject(AppiumDriver<WebElement> driver) {
     super(driver);
@@ -44,6 +40,7 @@ public class SearchPageObject extends MainPageObject {
   }
 
   public void typeSearchLine(String searchText) {
+    this.waitForElementAndClick(SEARCH_INPUT, "Can't find and click search input");
     this.waitForElementAndSendKeys(SEARCH_INPUT, searchText, "Can't find and type search input");
   }
 
@@ -87,8 +84,7 @@ public class SearchPageObject extends MainPageObject {
   }
 
   public void waitForEmptyResultsLabel() {
-    this.waitForElementPresent(
-        this.byText("No results found"), "Can't find empty results label", 15);
+    this.waitForElementPresent(SEARCH_EMPTY_RESULT_LABEL, "Can't find empty results label", 15);
   }
 
   public void assertThereIsNoResultOfSearch() {
@@ -104,7 +100,11 @@ public class SearchPageObject extends MainPageObject {
     List<WebElement> titleElements =
         this.waitForElementsPresent(SEARCH_RESULTS, "Can't find anything by the request");
     return titleElements.stream()
-        .map(title -> title.getAttribute("text"))
+        .map(
+            title ->
+                Platform.getInstance().isAndroid()
+                    ? title.getAttribute("text")
+                    : title.getAttribute("name"))
         .collect(Collectors.toList());
   }
 }
