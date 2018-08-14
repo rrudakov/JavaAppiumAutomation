@@ -119,6 +119,7 @@ public class SearchTests extends CoreTestCase {
     this.article.waitForTitleElement();
   }
 
+  // Я починил этот тест для iOS пока смотрел урок, так что коммитить особо нечего)
   @Test
   public void testSearchByTitleAndDesc() {
     String searchText = "Binary";
@@ -127,8 +128,7 @@ public class SearchTests extends CoreTestCase {
     this.search.typeSearchLine(searchText);
 
     List<Pair<String, String>> results = new ArrayList<>();
-    results.add(
-        Pair.of("Binary", "Disambiguation page providing links to articles with similar titles"));
+    results.add(Pair.of("Binary", "Wikimedia disambiguation page"));
     results.add(
         Pair.of(
             "Binary number", "System that represents numeric values using two symbols; 0 and 1"));

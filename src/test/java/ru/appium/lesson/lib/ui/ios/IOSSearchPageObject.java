@@ -10,7 +10,6 @@ public class IOSSearchPageObject extends SearchPageObject {
   static {
     SEARCH_INIT = By.xpath("//XCUIElementTypeSearchField[@name='Search Wikipedia']");
     SEARCH_INPUT = By.xpath("//XCUIElementTypeSearchField[not(@name)]");
-    // SEARCH_INPUT = By.xpath("//XCUIElementTypeSearchField[@value='Search Wikipedia']");
     SEARCH_INPUT_BY_ID = By.xpath("//XCUIElementTypeSearchField[not(@name)]");
     SEARCH_CANCEL_BUTTON = By.id("Close");
     SEARCH_RESULTS = By.xpath("//XCUIElementTypeLink");
