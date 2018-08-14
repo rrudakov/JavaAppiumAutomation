@@ -8,7 +8,7 @@ import ru.appium.lesson.lib.ui.ArticlePageObject;
 
 public class IOSArticlePageObject extends ArticlePageObject {
   static {
-    ARTICLE_TITLE = By.id("Java (programming language)");
+    ARTICLE_TITLE = By.xpath("//h1[@class='section_heading']");
     FOOTER_ELEMENT = By.id("View article in browser");
     OPTIONS_ADD_TO_MY_LIST = By.id("Save for later");
     CLOSE_BUTTON = By.id("Back");

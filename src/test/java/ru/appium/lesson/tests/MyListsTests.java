@@ -70,18 +70,29 @@ public class MyListsTests extends CoreTestCase {
     this.search.typeSearchLine(firstSearchText);
     this.search.clickByArticleWithSubstring("Object-oriented programming language");
     this.article.waitForTitleElement();
-    this.article.addArticleToMyList(listName);
+
+    if (Platform.getInstance().isAndroid()) this.article.addArticleToMyList(listName);
+    else {
+      this.article.addArticleToMySaved();
+      this.article.closeSyncButton();
+    }
+
     this.article.closeArticle();
 
     this.search.initSearchInput();
     this.search.typeSearchLine(secondSearchText);
     this.search.clickByArticleWithSubstring("Appium");
     this.article.waitForTitleElement();
-    this.article.addArticleToExistingList(listName);
+
+    if (Platform.getInstance().isAndroid()) this.article.addArticleToMyList(listName);
+    else this.article.addArticleToMySaved();
+
     this.article.closeArticle();
 
     this.navigation.clickMyLists();
-    this.myLists.openFolderByName(listName);
+
+    if (Platform.getInstance().isAndroid()) this.myLists.openFolderByName(listName);
+
     this.myLists.swipeByArticleToDelete(firstArticleTitle);
     this.myLists.openArticleFromSavedFolderByTitle(secondArticleTitle);
     String title = this.article.getArticleTitle();

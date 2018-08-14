@@ -1,5 +1,7 @@
 package ru.appium.lesson.lib.ui;
 
+import java.util.Set;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -23,13 +25,43 @@ public abstract class ArticlePageObject extends MainPageObject {
   }
 
   public WebElement waitForTitleElement() {
-    return this.waitForElementPresent(ARTICLE_TITLE, "Can't find article title on page", 15);
+    if (Platform.getInstance().isAndroid())
+      return this.waitForElementPresent(ARTICLE_TITLE, "Can't find article title on page", 15);
+    else {
+      this.waitForWebView();
+      Set<String> contexts = this.driver.getContextHandles();
+      for (String context : contexts) System.out.println(context);
+
+      this.driver.context((String) contexts.toArray()[1]);
+
+      WebElement titleElement =
+          this.waitForElementPresent(ARTICLE_TITLE, "Can't find article title inside WebView");
+
+      this.driver.context((String) contexts.toArray()[0]);
+
+      return titleElement;
+    }
   }
 
   public String getArticleTitle() {
-    WebElement titleElement = this.waitForTitleElement();
-    if (Platform.getInstance().isAndroid()) return titleElement.getAttribute("text");
-    else return titleElement.getAttribute("name");
+    if (Platform.getInstance().isAndroid()) {
+      WebElement titleElement = this.waitForTitleElement();
+      return titleElement.getAttribute("text");
+    } else {
+      this.waitForWebView();
+      Set<String> contexts = this.driver.getContextHandles();
+      for (String context : contexts) System.out.println(context);
+
+      this.driver.context((String) contexts.toArray()[1]);
+
+      WebElement titleElement =
+          this.waitForElementPresent(ARTICLE_TITLE, "Can't find article title inside WebView");
+
+      String articleTitle = titleElement.getText();
+      this.driver.context((String) contexts.toArray()[0]);
+
+      return articleTitle;
+    }
   }
 
   public void swipeToFooter() {
@@ -60,6 +92,9 @@ public abstract class ArticlePageObject extends MainPageObject {
 
   public void addArticleToMySaved() {
     this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST, "Can't find save to by list button");
+  }
+
+  public void closeSyncButton() {
     this.waitForElementAndClick(CLOSE_SYNC_BUTTON, "Can't find close sync button");
   }
 

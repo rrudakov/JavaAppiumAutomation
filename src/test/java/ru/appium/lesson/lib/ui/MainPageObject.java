@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import ru.appium.lesson.lib.Platform;
 
@@ -54,6 +55,12 @@ public class MainPageObject {
     return waitForElementPresent(locator, errorMessage, DEFAULT_TIMEOUT);
   }
 
+  protected void waitForWebView() {
+    this.waitForElementsPresent(By.className("XCUIElementTypeWebView"), "Can't find webview");
+
+    while (true) if (this.driver.getContextHandles().size() > 1) break;
+  }
+
   protected List<WebElement> waitForElementsPresent(
       By locator, String errorMessage, long timeOutInSeconds) {
     WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
@@ -79,7 +86,7 @@ public class MainPageObject {
   protected WebElement waitForElementAndSendKeys(
       By locator, String value, String errorMessage, long timeOutInSedonds) {
     WebElement element = waitForElementPresent(locator, errorMessage, timeOutInSedonds);
-    element.sendKeys(value);
+    ((MobileElement) element).setValue(value);
     return element;
   }
 

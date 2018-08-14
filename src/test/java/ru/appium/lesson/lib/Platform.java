@@ -12,7 +12,8 @@ import io.appium.java_client.ios.IOSDriver;
 public class Platform {
   private static final String PLATFORM_IOS = "ios";
   private static final String PLATFORM_ANDROID = "android";
-  private static String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
+  // private static String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
+  private static String APPIUM_URL = "http://192.168.0.6:4723/wd/hub";
 
   private static Platform instance;
 

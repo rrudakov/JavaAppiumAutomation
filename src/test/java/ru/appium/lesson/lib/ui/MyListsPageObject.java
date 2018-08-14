@@ -50,7 +50,7 @@ public abstract class MyListsPageObject extends MainPageObject {
 
   public void openArticleFromSavedFolderByTitle(String articleTitle) {
     this.waitForElementAndClick(
-        this.byText(articleTitle),
+        getSavedArticleXpathByTitle(articleTitle),
         String.format("Can't find saved article with title '%s'", articleTitle));
   }
 }
