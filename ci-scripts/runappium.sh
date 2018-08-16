@@ -1,2 +1,2 @@
 #!/bin/sh
-appium
+/usr/local/bin/appium
